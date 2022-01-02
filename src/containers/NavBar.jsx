@@ -7,6 +7,7 @@ import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { useNavigate, Link } from 'react-router-dom';
 
 const NavBar = ({ setSearchKey }) => {
+	// eslint-disable-next-line no-unused-vars
 	let [loggedFlag, setLoggedFlag] = useState(localStorage.getItem('logged') !== undefined ? localStorage.getItem('logged') : true);
 	const naviger = useNavigate();
 	const login = () => {
