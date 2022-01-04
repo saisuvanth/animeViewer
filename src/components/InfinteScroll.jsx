@@ -8,7 +8,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 const InfinteScroll = ({ url, name }) => {
 	const [total, setTotal] = useState(0);
 	const [video, setVideo] = useState(false);
-	const [seen, setSeen] = useState(false);
+	// const [seen, setSeen] = useState(false);
 	// const iframeEditor = useRef(null);
 
 	useEffect(() => {
