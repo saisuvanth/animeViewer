@@ -8,6 +8,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 const InfinteScroll = ({ url, name }) => {
 	const [total, setTotal] = useState(0);
 	const [video, setVideo] = useState(false);
+	const [seen, setSeen] = useState(false);
 	// const iframeEditor = useRef(null);
 
 	useEffect(() => {
@@ -36,8 +37,9 @@ const InfinteScroll = ({ url, name }) => {
 		if (node) observer.current.observe(node);
 	}, [hasMore]);
 
-	const handler = (e) => {
+	const handler = (event, e) => {
 		setVideo(e);
+		console.log(event.currentTarget.className += ` ${styles.seen}`);
 	}
 
 	const closeHandler = () => {
@@ -75,8 +77,8 @@ const InfinteScroll = ({ url, name }) => {
 				{episodeData.map((anime, index) => {
 					if ((episodeData.length - 10) === (index + 1)) {
 						return (
-							<ListGroup.Item key={anime.url} ref={lastAnimeElementRef} className={styles.episodelist}>
-								<Container fluid onClick={() => handler(anime.url)}>
+							<ListGroup.Item key={anime.url} ref={lastAnimeElementRef} className={styles.episodelist + ` ${seen}`}>
+								<Container fluid onClick={(e) => handler(e, anime.url)}>
 									<Row><span className={styles.animename}>{name}</span></Row>
 									<Row>
 										<div style={{ display: 'inline' }}>
@@ -86,8 +88,8 @@ const InfinteScroll = ({ url, name }) => {
 								</Container>
 							</ListGroup.Item>)
 					} else {
-						return (<ListGroup.Item key={anime.url} className={styles.episodelist}>
-							<Container fluid onClick={() => handler(anime.url)}>
+						return (<ListGroup.Item key={anime.url} className={styles.episodelist + ` ${seen}`}>
+							<Container fluid onClick={(e) => handler(e, anime.url)}>
 								<Row><span className={styles.animename}>{name}</span></Row>
 								<Row>
 									<div style={{ display: 'inline' }}>

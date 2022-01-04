@@ -1,15 +1,30 @@
-import React from "react";
+import React from 'react';
+import { Form, Row, Col } from 'react-bootstrap';
+import styles from '../containers/components.module.css';
 
-import background from '../assets/login.png';
-import logo from '../assets/logo.png';
+const Login = () => {
 
-export const Login = () => {
 	return (
-		<div style={{ border: '5px solid black', height: '100vh', width: '100vh' }}>
-			<img style={{ width: 'inherit', height: '100vh' }} src={background} alt="" />
-			<div style={{ backgroundColor: 'black' }}>
+		<div className='d-flex justify-content-center' style={{ width: '100%', height: '100vh' }}>
+			<Form className={styles.loginpage} style={{ color: 'white', padding: '50px', paddingTop: '90px' }}>
+				<Form.Group as={Row} className='mb-3' controlId="formBasicEmail">
+					<Form.Label column sm={2}>Email address</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="email" placeholder="Enter email" />
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} className='mb-3' controlId="formBasicPassword">
+					<Form.Label column sm={2}>Password</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="password" placeholder="Password" />
+					</Col>
+					<Form.Text id="passwordHelpBlock" muted>
+						Your password must be 8-20 characters long, contain letters and numbers, and
+						must not contain spaces, special characters, or emoji.
+					</Form.Text>
+				</Form.Group>
 
-			</div>
+			</Form>
 		</div>
 	)
 }

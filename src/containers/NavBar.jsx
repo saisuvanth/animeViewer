@@ -8,12 +8,13 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const NavBar = ({ setSearchKey }) => {
 	// eslint-disable-next-line no-unused-vars
-	let [loggedFlag, setLoggedFlag] = useState(localStorage.getItem('logged') !== undefined ? localStorage.getItem('logged') : true);
+	const [loggedFlag, setLoggedFlag] = useState(localStorage.getItem('logged') !== undefined ? localStorage.getItem('logged') : true);
 	const naviger = useNavigate();
 	const login = () => {
+		naviger('/login', { replace: true });
 	}
 	const logout = () => {
-		loggedFlag = false;
+		setLoggedFlag(false);
 	}
 	const handleEvent = () => {
 		naviger('/', { replace: true });
@@ -29,7 +30,7 @@ const NavBar = ({ setSearchKey }) => {
 			<Container fluid='md'>
 				<Navbar.Brand >
 					<img className={styles.log} src={logo} alt="" width={50} height={40} />{' '}
-					<span /*style={{ margin: 15, fontFamily: 'cursive', fontSize: 20, color: 'white' }}*/ className={styles.sitename}>Anime Viewer</span>
+					<span className={styles.sitename}>Anime Viewer</span>
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" color="white" />
 				<Navbar.Collapse  >
