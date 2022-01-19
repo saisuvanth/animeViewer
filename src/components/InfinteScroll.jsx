@@ -1,14 +1,30 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Container, ListGroup, Row, Image, Button } from 'react-bootstrap';
-import { episodeNumber, episodes } from '../scraper';
+import { episodeNumber, episodes, getEpisodeVideo } from '../scraper';
 import styles from '../containers/components.module.css';
 import loader from '../assets/loading1.svg';
 import { VscChromeClose } from 'react-icons/vsc'
+import { auth, db } from '../firebase';
+import { updateDoc, getDoc, doc } from 'firebase/firestore';
 
-const InfinteScroll = ({ url, name }) => {
+const InfinteScroll = ({ url, name, logged }) => {
 	const [total, setTotal] = useState(0);
 	const [video, setVideo] = useState(false);
-	// const iframeEditor = useRef(null);
+	const [epiStorage, setEpiStorage] = useState([]);
+	const [seenVideo, setSeenVideo] = useState({ num: null, event: null });
+
+	useEffect(() => {
+		if (logged) {
+			const uid = auth.currentUser.uid;
+			getDoc(doc(db, 'users', uid)).then(docInfo => {
+				const d = docInfo.data();
+				console.log(d);
+				setEpiStorage(d.seen[url].map(Number));
+			});
+		} else
+			setEpiStorage(window.localStorage.hasOwnProperty(url) ? window.localStorage.getItem(url).split(',').map(Number) : null);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [url, logged]);
 
 	useEffect(() => {
 		episodeNumber(url).then(res => {
@@ -36,22 +52,27 @@ const InfinteScroll = ({ url, name }) => {
 		if (node) observer.current.observe(node);
 	}, [hasMore]);
 
-	const handler = (event, e) => {
-		setVideo(e);
-		event.currentTarget.className += ` ${styles.seen}`;
+	const handler = async (event, e) => {
+		const episodenum = event.currentTarget.getElementsByTagName('span')[2].innerHTML;
+		setSeenVideo({ num: episodenum, event: event.currentTarget });
+		const vUrl = await getEpisodeVideo(e);
+		setVideo(vUrl);
 	}
 
-	const closeHandler = () => {
+	const closeHandler = async () => {
 		setVideo(false);
-	}
-
-	// const loadchanger = () => {
-	// 	const wind = iframeEditor.current.contentWindow.document.querySelector('jw-icon jw-icon-inline jw-button-color jw-reset jw-icon-fullscreen');
-	// 	console.log(wind);
-	// 	wind.click();
-	// }
-	const alertgiver = () => {
-		alert('Enter full screen mode for better experience');
+		let data = window.localStorage.hasOwnProperty(url) ? window.localStorage.getItem(url) : '';
+		data = data ? data.split(',') : [];
+		data.includes(seenVideo.num) ? data.at(0) : data.push(seenVideo.num);
+		window.localStorage[url] = data.join(',');
+		seenVideo.event.className += ` ${styles.seen}`;
+		if (logged) {
+			const uid = auth.currentUser.uid;
+			const { seen } = await (await getDoc(doc(db, 'users', uid))).data();
+			if (!seen.hasOwnProperty(url)) seen[url] = [];
+			seen[url].push(seenVideo.num);
+			await updateDoc(doc(db, 'users', uid), { seen: seen });
+		}
 	}
 
 	return (
@@ -66,39 +87,25 @@ const InfinteScroll = ({ url, name }) => {
 						</div>
 						<div style={{ padding: '10px' }}>
 							<div className={styles.videoplayer}>
-								<iframe src={video} frameBorder="0" title={video} onLoad={alertgiver} className={styles.video}></iframe>
+								<iframe src={video} frameBorder="0" title={video} allowFullScreen={true} className={styles.video}></iframe>
 							</div>
 						</div>
 					</div>
 				</div>
 			}
 			<ListGroup>
-				{episodeData.map((anime, index) => {
-					if ((episodeData.length - 10) === (index + 1)) {
-						return (
-							<ListGroup.Item key={anime.url} ref={lastAnimeElementRef} className={styles.episodelist}>
-								<Container fluid onClick={(e) => handler(e, anime.url)}>
-									<Row><span className={styles.animename}>{name}</span></Row>
-									<Row>
-										<div style={{ display: 'inline' }}>
-											<span className={styles.animeepisode}>Episode :</span><span className={styles.episodenum}>{anime.episode}</span>
-										</div>
-									</Row>
-								</Container>
-							</ListGroup.Item>)
-					} else {
-						return (<ListGroup.Item key={anime.url} className={styles.episodelist}>
-							<Container fluid onClick={(e) => handler(e, anime.url)}>
-								<Row><span className={styles.animename}>{name}</span></Row>
-								<Row>
-									<div style={{ display: 'inline' }}>
-										<span className={styles.animeepisode}>Episode :</span><span className={styles.episodenum}>{anime.episode}</span>
-									</div>
-								</Row>
-							</Container>
-						</ListGroup.Item>)
-					}
-				})}
+				{episodeData.map((anime, index) =>
+					<ListGroup.Item key={anime.episodeUrl} ref={episodeData.length - 10 === (index + 1) ? lastAnimeElementRef : null} className={styles.episodelist}>
+						<Container fluid className={epiStorage?.includes(index + 1) ? styles.seen : ''} onClick={(e) => handler(e, anime.episodeUrl)}>
+							<Row><span className={styles.animename}>{name}</span></Row>
+							<Row>
+								<div style={{ display: 'inline' }}>
+									<span className={styles.animeepisode}>Episode :</span><span className={styles.episodenum}>{anime.episode}</span>
+								</div>
+							</Row>
+						</Container>
+					</ListGroup.Item>
+				)}
 				{loading && <ListGroup.Item className={styles.loader}><Image src={loader} alt='Loading ...' /></ListGroup.Item>}
 				{error && <ListGroup.Item>Error</ListGroup.Item>}
 			</ListGroup>

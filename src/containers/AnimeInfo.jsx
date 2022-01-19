@@ -5,7 +5,7 @@ import SideBar from '../components/SideBar';
 import InfinteScroll from '../components/InfinteScroll';
 
 
-function AnimeInfo() {
+function AnimeInfo({ logged }) {
 	const { anid } = useParams();
 	const [animeName, setAnimeName] = useState('');
 
@@ -14,7 +14,7 @@ function AnimeInfo() {
 			<Row>
 				<Col xs='12' md='12' lg='6'><SideBar url={anid} name={setAnimeName} /></Col>
 				<Col xs='12' md='12' lg='6' style={{ color: 'white', height: '100%', overflow: 'auto' }}>
-					<InfinteScroll url={anid} name={animeName} />
+					<InfinteScroll url={anid} name={animeName} logged={logged} />
 				</Col>
 			</Row>
 		</Container>

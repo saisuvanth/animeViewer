@@ -1,31 +1,60 @@
-import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import React, { useRef, useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../containers/components.module.css';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
-const Login = () => {
+const Login = ({ setLogged }) => {
+	const navigate = useNavigate();
+	const email = useRef();
+	const password = useRef();
+	const [message, setMessage] = useState('');
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		signInWithEmailAndPassword(auth, email.current.value, password.current.value).then(res => {
+			if (res.user.emailVerified) {
+				navigate('/', { replace: true });
+				setLogged(true);
+			} else {
+				setMessage('Email is not verified');
+			}
+		}).catch(err => {
+			if (err.code === 'auth/wrong-password') setMessage('Password/Email are incorrect');
+		})
+	}
 	return (
-		<div className='d-flex justify-content-center' style={{ width: '100%', height: '100vh' }}>
-			<Form className={styles.loginpage} style={{ color: 'white', padding: '50px', paddingTop: '90px' }}>
-				<Form.Group as={Row} className='mb-3' controlId="formBasicEmail">
-					<Form.Label column sm={2}>Email address</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="email" placeholder="Enter email" />
-					</Col>
+		<div className={styles.Login} >
+			<Form onSubmit={handleSubmit}>
+				<Form.Group size="lg" controlId="email">
+					<Form.Label> <h5>Email Address</h5></Form.Label>
+					<Form.Control
+						autoFocus
+						type="email"
+						ref={email}
+						placeholder="example@gmail.com"
+					/>
 				</Form.Group>
-				<Form.Group as={Row} className='mb-3' controlId="formBasicPassword">
-					<Form.Label column sm={2}>Password</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="password" placeholder="Password" />
-					</Col>
-					<Form.Text id="passwordHelpBlock" muted>
-						Your password must be 8-20 characters long, contain letters and numbers, and
-						must not contain spaces, special characters, or emoji.
-					</Form.Text>
+				<Form.Group size="lg" controlId="password">
+					<Form.Label><h5>Password</h5></Form.Label>
+					<Form.Control
+						type="password"
+						ref={password}
+						placeholder="Password"
+					/>
+					{message ? <div className={styles.errormsg}>{message}</div> : null}
 				</Form.Group>
-
+				<div className={styles.submit + ' text-center'}>
+					<Button block size="lg" type="submit">
+						Login
+					</Button>
+				</div>
+				<Form.Text>
+					Don't have an account? <Link to={'/register'}>Sign Up</Link>
+				</Form.Text>
 			</Form>
-		</div>
+		</div >
 	)
 }
 

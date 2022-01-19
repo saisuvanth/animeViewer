@@ -8,6 +8,25 @@
 	font-size: 20px; 
 	color: 'white';
 }
+.Login{
+	color: white;
+	height: 100vh;
+}
+
+.submit{
+	margin-top: 20px;
+}
+
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 520px;
+  }
+}
 .form{
 	border-radius: 5px;
 	width: 350px;
@@ -26,8 +45,69 @@
 	width: fit-content;
 }
 
+.favv{
+	border: 0px;
+	color: black;
+	right: 5px;
+	position: absolute;
+	transform: scale(1);
+	background-color: rgb(247 247 247);
+	transition: .3s ease-in-out;
+}
+
+.favv_disabled{
+	border: 0px;
+	background-color: rgb(247 247 247);
+	color: gray;
+	right: 5px;
+	position: absolute;
+}
+
+.favv:active{
+	color: red;
+}
+
+.favv:hover{
+	transform: scale(1.25);
+	color: red;
+}
+
+.name{
+	color: aquamarine;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	margin-left: 15px;
+}
+.nameHead{
+	color: wheat;
+	position: relative;
+	margin: 10px;
+	margin-left: 10%;
+}
+
 .loginpage{
 	width:70%;
+}
+
+.errormsg{
+	color: red;
+}
+.informsg{
+	color: rgb(13, 196, 186);
+}
+
+.favourites{
+	text-decoration:none;
+	display: inline-block;
+	color: rgb(231, 222, 222);
+	margin-right: 20px;
+	transform: scale(1);
+	transition:.9s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.favourites:hover{
+	text-decoration: none;
+	color:white;
+	transform: scale(1.2);	
 }
 
 
@@ -37,16 +117,17 @@
 
 .card{
 	width: 18rem;
-	-webkit-transform: scale(1);
+	height: 10rem;
+	/* -webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .4s ease-in-out;
-	transition: .4s ease-in-out;
+	transition: .4s ease-in-out; */
 }
 
-.card:hover{
+/* .card:hover{
 	-webkit-transform: scale(1.06);
 	transform: scale(1.06);
-}
+} */
 
 .card_title{
 	text-decoration: none;
@@ -114,7 +195,7 @@
 	z-index: 2000; 
 	opacity: 1; 
 	transform: scale(1); 
-	overflow: hidden auto; 
+	overflow: hidden; 
 	/* overflow-y: inherit; */
 	position: fixed; 
 	inset: 0px; 
@@ -123,7 +204,6 @@
 
 .videocontainer{
 	width: 85%; 
-	/* height: 95%; */
 	aspect-ratio: 1.78; 
 	display: inline-block; 
 	vertical-align: middle; 
@@ -131,15 +211,14 @@
 	max-width: 100%; 
 	background: rgb(30, 30, 30); 
 	position: fixed; 
-	top: 1.09rem; 
-	/* max-height:fit-content ; */
+	top: 0.75rem; 
 	right: 0px; 
 	left: 0px; 
 	z-index: 99999; 
 	outline: 0px; 
 	word-break: break-all; 
 	border-radius: 0.55rem;
-	overflow-y: hidden;
+	overflow: hidden;
 }
 
 .close{
@@ -166,7 +245,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-	overflow-y: hidden;
+	/* overflow: hidden; */
 	width: 100%;
 	aspect-ratio: 16/9;
 }
@@ -181,12 +260,22 @@
     height: 99%;
     margin: auto;
     background: transparent;
-	overflow-y: inherit;
+	/* overflow-y: inherit; */
 }
 
 @media screen and (max-width:1400px){
 	.card{
+		width: 15rem;
+	}
+}
+
+@media screen and (max-width:1200px){
+	.card{
 		width: 12rem;
+	}
+	.videocontainer{
+		top: 2.5rem;
+		width: 95%;
 	}
 }
 
@@ -209,12 +298,13 @@
 		width: initial;
 		height: fit-content;
 	}
-	/* .sidebar{
-		display: none;
+	.favourites{
+		display: block;
+		margin-bottom: 5px;
 	}
-	.episodelist{
+	.videocontainer{
 		width: 100%;
-	} */
+	}
 }
 
 @media screen and (max-width: 768px){

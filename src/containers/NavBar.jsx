@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Button, Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/logo.png';
 import styles from './components.module.css';
@@ -6,15 +6,10 @@ import { BsSearch } from 'react-icons/bs';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 import { useNavigate, Link } from 'react-router-dom';
 
-const NavBar = ({ setSearchKey }) => {
-	// eslint-disable-next-line no-unused-vars
-	const [loggedFlag, setLoggedFlag] = useState(localStorage.getItem('logged') !== undefined ? localStorage.getItem('logged') : true);
+const NavBar = ({ setSearchKey, logged, setLogged }) => {
 	const naviger = useNavigate();
-	const login = () => {
-		naviger('/login', { replace: true });
-	}
 	const logout = () => {
-		setLoggedFlag(false);
+		setLogged(false);
 	}
 	const handleEvent = () => {
 		naviger('/', { replace: true });
@@ -42,10 +37,12 @@ const NavBar = ({ setSearchKey }) => {
 							</Button>
 						</div>
 					</Nav>
-					{loggedFlag ? <Link to={'/wishlist'}>Favourites</Link> : null}
-					<Nav className={`me-auto`}>
-						{loggedFlag ? <Button className={styles.account} onClick={logout}><FiLogOut />&nbsp;&nbsp;&nbsp;Logout</Button>
-							: <Button className={styles.login} onClick={login}><FiLogIn />&nbsp;&nbsp;&nbsp;Login</Button>}
+					<Nav className={`me-auto my-2 my-lg-0`}>
+						{logged ? <div className="text-center">
+							<Link to={'/wishlist'}> <div className={styles.favourites}>Favourites</div></Link>
+							<Button className={styles.account} onClick={logout}><FiLogOut />&nbsp;&nbsp;&nbsp;Logout</Button>
+						</div>
+							: <Link style={{ textDecoration: 'none', color: 'white' }} to={'/login'}><Button className={styles.login}><FiLogIn />&nbsp;&nbsp;&nbsp;Login</Button></Link>}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
