@@ -29,7 +29,8 @@ const InfinteScroll = ({ url, name, logged }) => {
 	useEffect(() => {
 		episodeNumber(url).then(res => {
 			setTotal(res);
-		});
+			console.log(res);
+		})
 	}, [url]);
 	const [pageNumber, setPageNumber] = useState(1);
 
