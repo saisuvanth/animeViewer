@@ -3,12 +3,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: "AIzaSyBXxtG2Zdw8pP25-HtVZlTmW2XEzQBozoo",
-	authDomain: "animeviewer-e4a28.firebaseapp.com",
-	projectId: "animeviewer-e4a28",
-	storageBucket: "animeviewer-e4a28.appspot.com",
-	messagingSenderId: "341390549229",
-	appId: "1:341390549229:web:ebbf3fe179aab25f862ce4"
+	apiKey: process.env.API_KEY,
+	authDomain: process.env.AUTH_DOMAIN,
+	projectId: process.env.PROJECT_ID,
+	storageBucket: process.env.STORAGE_BUCKET,
+	messagingSenderId: process.env.MESSAGE_SENDER_ID,
+	appId: process.env.APP_ID
 };
 
 // Initialize Firebase
