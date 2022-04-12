@@ -3,7 +3,7 @@ import axios from 'axios';
 const limit = 20;
 
 const search = async (key = null, wishlist) => {
-	let markup = await axios.get(key ? `https://gogoanime.run/search.html?keyword=${key}` : 'https://gogoanime.run/popular.html');
+	let markup = await axios.get(key ? `https://gogoanime.run//search.html?keyword=${key}` : 'https://gogoanime.run/popular.html');
 	const $ = cheerio.load(markup.data);
 	let data = [];
 	const list = $('.items > li');
