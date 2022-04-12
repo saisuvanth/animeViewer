@@ -3,7 +3,7 @@ import axios from 'axios';
 const limit = 20;
 
 const search = async (key = null, wishlist) => {
-	let markup = await axios.get(key ? `https://gogoanime.film//search.html?keyword=${key}` : 'https://gogoanime.film/popular.html');
+	let markup = await axios.get(key ? `https://gogoanime.run/search.html?keyword=${key}` : 'https://gogoanime.run/popular.html');
 	const $ = cheerio.load(markup.data);
 	let data = [];
 	const list = $('.items > li');
@@ -23,7 +23,7 @@ const search = async (key = null, wishlist) => {
 }
 
 const anime = async (id) => {
-	let markup = await axios.get(`https://gogoanime.film/category/${id}`);
+	let markup = await axios.get(`https://gogoanime.run/category/${id}`);
 	const $ = cheerio.load(markup.data);
 	const episodes = parseInt($('#episode_page > li:last-child').text().trim().split('-')[1]);
 	const [, type, description, genre, date, status, other] = $('.anime_info_body_bg > p');
@@ -42,7 +42,7 @@ const anime = async (id) => {
 }
 
 const episodeNumber = async (id) => {
-	let markup = await axios.get(`https://gogoanime.film/category/${id}`);
+	let markup = await axios.get(`https://gogoanime.run/category/${id}`);
 	let $ = cheerio.load(markup.data);
 	let episodes = parseInt($('#episode_page > li:last-child').text().trim().split('-')[1]);
 	return episodes;
@@ -50,7 +50,7 @@ const episodeNumber = async (id) => {
 
 const episodes = async (id, episodes, pageNumber = 1) => {
 	let start = (pageNumber - 1) * limit, i = 0;
-	let data = { start: start, totalEpisodes: episodes, result: [] }, url = `https://gogoanime.film/${id}-episode-`;
+	let data = { start: start, totalEpisodes: episodes, result: [] }, url = `https://gogoanime.run/${id}-episode-`;
 	while (i++ < limit && ++start <= episodes) {
 		data.result.push({ episode: start, episodeUrl: `${url}${start}` });
 	}
